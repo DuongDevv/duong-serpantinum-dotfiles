@@ -80,7 +80,9 @@ in
 
     home.activation.serpantinumSettings = hm.dag.entryAfter [ "writeBoundary" ] ''
       run mkdir -p ${escapeShellArg (builtins.dirOf settingsTarget)}
-      run install -m 0644 ${settingsFile} ${escapeShellArg settingsTarget}
+      if [ ! -e ${escapeShellArg settingsTarget} ]; then
+        run install -m 0644 ${settingsFile} ${escapeShellArg settingsTarget}
+      fi
     '';
 
     systemd.user.services.serpantinum = mkIf cfg.systemd.enable {
