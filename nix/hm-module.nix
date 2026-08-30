@@ -94,8 +94,10 @@ in
       };
 
       Service = {
-        ExecStart = "${cfg.package}/bin/serpantinumd";
+        ExecStart = "${cfg.package}/bin/serpantinumd start";
         Restart = "on-failure";
+        KillMode = "mixed";
+        TimeoutStopSec = "5s";
         Environment = mapAttrsToList (n: v: "${n}=${v}") cfg.systemd.environment;
       };
 
