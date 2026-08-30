@@ -70,26 +70,11 @@ Item {
     }
 
     function isEthDevice(dev) {
-        if (!dev) return false;
-        if (dev.networks !== undefined) return false;
-        if (typeof DeviceType !== "undefined") {
-            if (DeviceType.Ethernet !== undefined && dev.type === DeviceType.Ethernet) return true;
-            if (DeviceType.Wired !== undefined && dev.type === DeviceType.Wired) return true;
-        }
-        if (dev.type === 1 || dev.type === "wired" || dev.type === "ethernet") return true;
-        if (dev.hasLink !== undefined || dev.linkSpeed !== undefined) return true;
-        return false;
+        return !!dev && dev.type === DeviceType.Wired;
     }
 
     function isWifiDevice(dev) {
-        if (!dev) return false;
-        if (typeof DeviceType !== "undefined") {
-            if (DeviceType.Wifi !== undefined && dev.type === DeviceType.Wifi) return true;
-            if (DeviceType.Wireless !== undefined && dev.type === DeviceType.Wireless) return true;
-        }
-        if (dev.type === 2 || dev.type === "wifi" || dev.type === "wireless") return true;
-        if (dev.networks !== undefined) return true;
-        return false;
+        return !!dev && dev.type === DeviceType.Wifi;
     }
 
     function findDevices() {
@@ -101,8 +86,7 @@ Item {
             if (!d) continue;
             if (!window.ethDevice && window.isEthDevice(d)) {
                 window.ethDevice = d;
-            }
-            if (!window.wifiDevice && window.isWifiDevice(d)) {
+            } else if (!window.wifiDevice && window.isWifiDevice(d)) {
                 window.wifiDevice = d;
                 d.scannerEnabled = true;
             }
