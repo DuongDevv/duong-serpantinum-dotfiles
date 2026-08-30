@@ -199,7 +199,7 @@ Item {
         interval: 1000; running: window.visible; repeat: true
         onTriggered: {
             window.currentTime = new Date();
-            window.secondPulse = 1.06;
+            window.secondPulse = 1.02;
             pulseReset.start();
 
             if (window.currentTime.getHours() === 0 && window.currentTime.getMinutes() === 0 && window.currentTime.getSeconds() === 0) {
@@ -533,9 +533,9 @@ Item {
                     SequentialAnimation on opacity {
                         loops: Animation.Infinite
                         running: window.visible
-                        NumberAnimation { from: 0.015; to: 0.022; duration: 5625; easing.type: Easing.OutSine }
-                        NumberAnimation { from: 0.022; to: 0.01; duration: 11250; easing.type: Easing.InOutSine }
-                        NumberAnimation { from: 0.01; to: 0.015; duration: 5625; easing.type: Easing.InSine }
+                        NumberAnimation { from: 0.015; to: 0.018; duration: 5625; easing.type: Easing.OutSine }
+                        NumberAnimation { from: 0.018; to: 0.012; duration: 11250; easing.type: Easing.InOutSine }
+                        NumberAnimation { from: 0.012; to: 0.015; duration: 5625; easing.type: Easing.InSine }
                     }
 
                     transform: [
@@ -543,7 +543,7 @@ Item {
                             SequentialAnimation on y {
                                 loops: Animation.Infinite
                                 running: window.visible
-                                NumberAnimation { to: -window.s(20); duration: 6000; easing.type: Easing.InOutSine }
+                                NumberAnimation { to: -window.s(8); duration: 6000; easing.type: Easing.InOutSine }
                                 NumberAnimation { to: 0; duration: 6000; easing.type: Easing.InOutSine }
                             }
                         },
@@ -569,32 +569,32 @@ Item {
                         SequentialAnimation on y {
                             loops: Animation.Infinite
                             running: window.visible
-                            NumberAnimation { to: -window.s(15); duration: 4000; easing.type: Easing.InOutSine }
-                            NumberAnimation { to: 0; duration: 4000; easing.type: Easing.InOutSine }
+                            NumberAnimation { to: -window.s(6); duration: 4500; easing.type: Easing.InOutSine }
+                            NumberAnimation { to: 0; duration: 4500; easing.type: Easing.InOutSine }
                         }
                     },
                     Rotation {
                         axis { x: 1; y: 0; z: 0 }
                         SequentialAnimation on angle {
                             loops: Animation.Infinite; running: window.visible
-                            NumberAnimation { to: 3.5; duration: 4200; easing.type: Easing.InOutSine }
-                            NumberAnimation { to: -3.5; duration: 4200; easing.type: Easing.InOutSine }
+                            NumberAnimation { to: 1.5; duration: 4800; easing.type: Easing.InOutSine }
+                            NumberAnimation { to: -1.5; duration: 4800; easing.type: Easing.InOutSine }
                         }
                     },
                     Rotation {
                         axis { x: 0; y: 1; z: 0 }
                         SequentialAnimation on angle {
                             loops: Animation.Infinite; running: window.visible
-                            NumberAnimation { to: 2.5; duration: 5100; easing.type: Easing.InOutSine }
-                            NumberAnimation { to: -2.5; duration: 5100; easing.type: Easing.InOutSine }
+                            NumberAnimation { to: 1.2; duration: 5500; easing.type: Easing.InOutSine }
+                            NumberAnimation { to: -1.2; duration: 5500; easing.type: Easing.InOutSine }
                         }
                     },
                     Rotation {
                         axis { x: 0; y: 0; z: 1 }
                         SequentialAnimation on angle {
                             loops: Animation.Infinite; running: window.visible
-                            NumberAnimation { to: 1.5; duration: 5800; easing.type: Easing.InOutSine }
-                            NumberAnimation { to: -1.5; duration: 5800; easing.type: Easing.InOutSine }
+                            NumberAnimation { to: 0.8; duration: 6200; easing.type: Easing.InOutSine }
+                            NumberAnimation { to: -0.8; duration: 6200; easing.type: Easing.InOutSine }
                         }
                     }
                 ]
@@ -610,8 +610,8 @@ Item {
                     SequentialAnimation on scale {
                         loops: Animation.Infinite
                         running: window.visible
-                        NumberAnimation { to: 1.03; duration: 3500; easing.type: Easing.InOutSine }
-                        NumberAnimation { to: 1.0; duration: 3500; easing.type: Easing.InOutSine }
+                        NumberAnimation { to: 1.012; duration: 4000; easing.type: Easing.InOutSine }
+                        NumberAnimation { to: 1.0; duration: 4000; easing.type: Easing.InOutSine }
                     }
 
                     onWidthChanged: requestPaint()
@@ -641,7 +641,7 @@ Item {
                     anchors.centerIn: parent
                     spacing: 0
                     z: 0
-                    scale: 0.95 + (0.05 * window.secondPulse)
+                    scale: 0.98 + (0.02 * window.secondPulse)
 
                     Text {
                         Layout.alignment: Qt.AlignHCenter
@@ -692,14 +692,17 @@ Item {
                             property int relIdx: isToday ? (index - window.activeHourIndex) : index
                             property real targetAngleDeg: isToday ? (65 + (relIdx * 30)) : (index * (360 / Math.max(1, mCount)))
                             property real orbitOffset: isToday ? 0 : window.globalOrbitOffset
-                            property real osc: isToday ? (Math.sin(window.globalOscPhase + index) * 5) : 0
+                            property real osc: isToday ? (Math.sin(window.globalOscPhase + index) * 2.5) : 0
                             property real rad: (targetAngleDeg + orbitOffset + osc + window.transitionSpin) * (Math.PI / 180)
 
                             x: Math.cos(rad) * rx - width / 2
                             y: Math.sin(rad) * ry - height / 2
                             z: Math.sin(rad) * window.s(100)
 
-                            scale: isHighlighted ? 1.35 : (isToday ? (0.95 + 0.20 * Math.sin(rad)) : (0.90 + 0.25 * Math.sin(rad)))
+                            property real baseScale: isHighlighted ? 1.35 : (isToday ? (0.95 + 0.20 * Math.sin(rad)) : (0.90 + 0.25 * Math.sin(rad)))
+                            scale: baseScale * (hrMa.containsMouse && !isHighlighted ? 1.04 : 1.0)
+                            Behavior on scale { NumberAnimation { duration: 250; easing.type: Easing.OutQuint } }
+
                             opacity: isHighlighted ? 1.0 : (isToday ? (0.7 + 0.3 * ((Math.sin(rad) + 1) / 2)) : (0.65 + 0.35 * ((Math.sin(rad) + 1) / 2)))
 
                             width: window.s(52)
@@ -707,13 +710,13 @@ Item {
 
                             Rectangle {
                                 anchors.fill: parent
-                                radius: window.s(26)
-                                color: isHighlighted ? window.textAccent : (hrMa.containsMouse ? Qt.tint(window.surface1, Qt.alpha(window.textAccent, 0.15)) : Qt.tint(window.surface0, Qt.alpha(window.textAccent, 0.04)))
-                                border.color: isHighlighted ? Qt.lighter(window.textAccent, 1.1) : (hrMa.containsMouse ? Qt.alpha(window.textAccent, 0.45) : Qt.alpha(window.surface1, 0.6))
+                                radius: Math.min(window.s(26), ThemeBackend.borderRadius * 1.75)
+                                color: isHighlighted ? window.textAccent : (hrMa.containsMouse ? Qt.lighter(window.surface0, 1.12) : window.surface0)
+                                border.color: isHighlighted ? Qt.lighter(window.textAccent, 1.1) : (hrMa.containsMouse ? Qt.alpha(window.surface2, 0.9) : Qt.alpha(window.surface1, 0.6))
                                 border.width: 1
 
-                                Behavior on color { ColorAnimation { duration: 200 } }
-                                Behavior on border.color { ColorAnimation { duration: 200 } }
+                                Behavior on color { ColorAnimation { duration: 180 } }
+                                Behavior on border.color { ColorAnimation { duration: 180 } }
 
                                 ColumnLayout {
                                     anchors.centerIn: parent
@@ -726,6 +729,7 @@ Item {
                                         font.weight: Font.Bold
                                         font.pixelSize: window.s(11.5)
                                         color: isHighlighted ? window.base : (hrMa.containsMouse ? window.text : window.overlay1)
+                                        Behavior on color { ColorAnimation { duration: 180 } }
                                     }
 
                                     Text {
@@ -734,9 +738,6 @@ Item {
                                         font.family: ThemeBackend.fontFamily
                                         font.pixelSize: window.s(16.5)
                                         color: isHighlighted ? window.base : (modelData ? (modelData.hex || window.text) : window.text)
-
-                                        transform: Translate { y: hrMa.containsMouse ? -window.s(3) : 0 }
-                                        Behavior on transform { NumberAnimation { duration: 200; easing.type: Easing.OutBack } }
                                     }
 
                                     Text {
@@ -760,8 +761,8 @@ Item {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.leftMargin: window.s(40)
-                width: window.s(320)
-                height: window.s(430)
+                width: window.s(310)
+                height: window.s(350)
                 color: Qt.alpha(window.surface0, 0.2)
                 radius: ThemeBackend.borderRadius
                 border.color: Qt.alpha(window.surface1, 0.4)
@@ -775,19 +776,23 @@ Item {
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: window.s(20)
-                    spacing: window.s(12)
+                    anchors.topMargin: window.s(12)
+                    anchors.bottomMargin: window.s(12)
+                    anchors.leftMargin: window.s(16)
+                    anchors.rightMargin: window.s(16)
+                    spacing: 0
 
                     RowLayout {
                         Layout.fillWidth: true
+                        Layout.bottomMargin: window.s(14)
 
                         IconButton {
-                            Layout.preferredWidth: window.s(30)
-                            Layout.preferredHeight: window.s(30)
-                            size: window.s(30)
+                            Layout.preferredWidth: window.s(28)
+                            Layout.preferredHeight: window.s(28)
+                            size: window.s(28)
                             cornerRadius: window.s(8)
                             buttonIcon: "󰃭"
-                            iconFontSize: window.s(15)
+                            iconFontSize: window.s(14)
                             accentColor: window.surface0
                             textColor: window.text
                             opacity: window.targetMonthOffset !== 0 ? 1.0 : 0.0
@@ -797,12 +802,12 @@ Item {
                         }
 
                         IconButton {
-                            Layout.preferredWidth: window.s(30)
-                            Layout.preferredHeight: window.s(30)
-                            size: window.s(30)
+                            Layout.preferredWidth: window.s(28)
+                            Layout.preferredHeight: window.s(28)
+                            size: window.s(28)
                             cornerRadius: window.s(8)
                             buttonIcon: ""
-                            iconFontSize: window.s(15)
+                            iconFontSize: window.s(14)
                             accentColor: window.surface0
                             textColor: window.text
                             onClicked: window.setMonthOffset(window.targetMonthOffset - 1)
@@ -813,7 +818,7 @@ Item {
                             text: window.targetMonthName.toUpperCase()
                             font.family: ThemeBackend.fontFamily
                             font.weight: Font.Black
-                            font.pixelSize: window.s(15)
+                            font.pixelSize: window.s(14)
                             fontSizeMode: Text.Fit
                             minimumPixelSize: window.s(8)
                             color: window.text
@@ -824,12 +829,12 @@ Item {
                         }
 
                         IconButton {
-                            Layout.preferredWidth: window.s(30)
-                            Layout.preferredHeight: window.s(30)
-                            size: window.s(30)
+                            Layout.preferredWidth: window.s(28)
+                            Layout.preferredHeight: window.s(28)
+                            size: window.s(28)
                             cornerRadius: window.s(8)
                             buttonIcon: ""
-                            iconFontSize: window.s(15)
+                            iconFontSize: window.s(14)
                             accentColor: window.surface0
                             textColor: window.text
                             onClicked: window.setMonthOffset(window.targetMonthOffset + 1)
@@ -838,6 +843,8 @@ Item {
 
                     RowLayout {
                         Layout.fillWidth: true
+                        Layout.bottomMargin: window.s(4)
+
                         Repeater {
                             model: [I18n.t("calendar.days.mo"), I18n.t("calendar.days.tu"), I18n.t("calendar.days.we"), I18n.t("calendar.days.th"), I18n.t("calendar.days.fr"), I18n.t("calendar.days.sa"), I18n.t("calendar.days.su")]
                             Text {
@@ -845,7 +852,7 @@ Item {
                                 text: modelData
                                 font.family: ThemeBackend.fontFamily
                                 font.weight: Font.Black
-                                font.pixelSize: window.s(13)
+                                font.pixelSize: window.s(11.5)
                                 color: window.overlay0
                                 horizontalAlignment: Text.AlignHCenter
                             }
@@ -856,7 +863,7 @@ Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         columns: 7
-                        rowSpacing: window.s(3)
+                        rowSpacing: window.s(2)
                         columnSpacing: window.s(3)
 
                         opacity: window.calendarContentOpacity
@@ -869,8 +876,8 @@ Item {
                                 Layout.fillHeight: true
                                 enabled: false
                                 buttonText: dayNum
-                                textFontSize: window.s(12.5)
-                                cornerRadius: window.s(7)
+                                textFontSize: window.s(11.5)
+                                cornerRadius: window.s(5)
                                 horizontalPadding: 0
                                 accentColor: isToday ? window.textAccent : "transparent"
                                 textColor: isToday ? window.base : (isCurrentMonth ? window.text : window.surface0)
@@ -899,12 +906,12 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignRight | Qt.AlignTop
-                        spacing: window.s(12)
+                        spacing: window.s(14)
 
                         IconButton {
-                            Layout.preferredWidth: window.s(30)
-                            Layout.preferredHeight: window.s(30)
-                            size: window.s(30)
+                            Layout.preferredWidth: window.s(28)
+                            Layout.preferredHeight: window.s(28)
+                            size: window.s(28)
                             cornerRadius: window.s(8)
                             buttonIcon: ""
                             iconFontSize: window.s(12)
@@ -926,9 +933,9 @@ Item {
                         }
 
                         IconButton {
-                            Layout.preferredWidth: window.s(30)
-                            Layout.preferredHeight: window.s(30)
-                            size: window.s(30)
+                            Layout.preferredWidth: window.s(28)
+                            Layout.preferredHeight: window.s(28)
+                            size: window.s(28)
                             cornerRadius: window.s(8)
                             buttonIcon: ""
                             iconFontSize: window.s(12)
@@ -992,17 +999,17 @@ Item {
                     GridLayout {
                         Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                         columns: 2
-                        rowSpacing: window.s(6)
-                        columnSpacing: window.s(6)
+                        rowSpacing: window.s(8)
+                        columnSpacing: window.s(8)
 
                         Repeater {
                             model: 4
 
                             ClickButton {
-                                Layout.preferredWidth: window.s(104)
-                                Layout.preferredHeight: window.s(36)
-                                cornerRadius: window.s(8)
-                                horizontalPadding: window.s(6)
+                                Layout.preferredWidth: window.s(118)
+                                Layout.preferredHeight: window.s(42)
+                                cornerRadius: window.s(9)
+                                horizontalPadding: window.s(8)
 
                                 property var forecast: window.weatherData && window.weatherData.forecast[window.targetWeatherView] ? window.weatherData.forecast[window.targetWeatherView] : null
 
@@ -1015,8 +1022,8 @@ Item {
                                 ) : ""
                                 subText: index === 0 ? I18n.t("calendar.weather.wind") : index === 1 ? I18n.t("calendar.weather.humid") : index === 2 ? I18n.t("calendar.weather.rain") : I18n.t("calendar.weather.feels")
 
-                                iconFontSize: window.s(13)
-                                textFontSize: window.s(10.5)
+                                iconFontSize: window.s(14)
+                                textFontSize: window.s(11.5)
 
                                 accentColor: window.surface0
                                 textColor: isHoveredOrHighlighted ? window.textAccent : window.overlay0
