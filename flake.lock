@@ -1,0 +1,44 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1787900134,
+        "narHash": "sha256-VYXO0XZlgj06dxJZRhrD3WoSsvq/c7+/Akyoa22pefw=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "83199d0d373dd3ac2b9a1996b1d0263f76ab7a4c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "serpantinum-wallpapers": "serpantinum-wallpapers"
+      }
+    },
+    "serpantinum-wallpapers": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787675697,
+        "narHash": "sha256-ADvKHmQDsX50opqeiyEAB3uxUTjuCyDym0pGQCy7Sws=",
+        "owner": "ilyamiro",
+        "repo": "shell-wallpapers",
+        "rev": "1cb526443872fbf283a3f8305c3aa647545c02e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ilyamiro",
+        "repo": "shell-wallpapers",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
