@@ -30,10 +30,14 @@
           "vis"
         ]
       ],
-      "center": [
-        "centerbox"
-      ],
-      "right": [
+     "center": [
+        [
+          "timedate",
+          "info",
+          "weather"
+        ]
+      ],      
+     "right": [
         "tray",
         [
           "kb",
