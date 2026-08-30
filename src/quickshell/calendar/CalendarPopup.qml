@@ -7,7 +7,6 @@ import Quickshell.Io
 import QtQuick.Window
 import "../"
 import "../reusables"
-import "../singletons"
 
 Item {
     id: window
@@ -642,36 +641,26 @@ Item {
                     z: 0
                     scale: 0.95 + (0.05 * window.secondPulse)
 
-                    RowLayout {
+                    Text {
                         Layout.alignment: Qt.AlignHCenter
-                        spacing: Math.round(2 * window.sf)
-                        Text {
-                            text: Qt.formatTime(window.currentTime, "HH:mm")
-                            font.family: ThemeBackend.fontFamily
-                            font.weight: Font.Black
-                            font.pixelSize: Math.round(84 * window.sf)
-                            color: window.text
-                            style: Text.Outline
-                            styleColor: Qt.alpha(window.crust, 0.4)
+                        text: DateTime.time
+                        font.family: ThemeBackend.fontFamily
+                        font.weight: Font.Black
+                        font.pixelSize: {
+                            let baseSize = Math.round(84 * window.sf);
+                            let len = (DateTime.time || "").length;
+                            if (len <= 5) return baseSize;
+                            let scaleFactor = Math.min(1.0, Math.pow(5 / len, 0.7));
+                            return Math.round(Math.max(36 * window.sf, baseSize * scaleFactor));
                         }
-                        Text {
-                            text: Qt.formatTime(window.currentTime, ":ss")
-                            font.family: ThemeBackend.fontFamily
-                            font.weight: Font.Bold
-                            font.pixelSize: Math.round(32 * window.sf)
-                            color: window.textAccent
-                            Layout.alignment: Qt.AlignBottom
-                            Layout.bottomMargin: Math.round(15 * window.sf)
-                            opacity: window.secondPulse > 1.02 ? 1.0 : 0.6
-                            style: Text.Outline
-                            styleColor: Qt.alpha(window.crust, 0.4)
-                            Behavior on color { ColorAnimation { duration: 1000 } }
-                        }
+                        color: window.text
+                        style: Text.Outline
+                        styleColor: Qt.alpha(window.crust, 0.4)
                     }
 
                     Text {
                         Layout.alignment: Qt.AlignHCenter
-                        text: Qt.formatDateTime(window.currentTime, "dddd, MMMM dd")
+                        text: DateTime.fullDate
                         font.family: ThemeBackend.fontFamily
                         font.weight: Font.Bold
                         font.pixelSize: Math.round(16 * window.sf)
