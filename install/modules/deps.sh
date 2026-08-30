@@ -1,5 +1,50 @@
 #!/usr/bin/env bash
 
+SUPPORTED_DISTROS=(
+    "arch"
+    "endeavouros"
+    "manjaro"
+    "cachyos"
+    "garuda"
+    "arcolinux"
+    "archcraft"
+    "artix"
+    "blackarch"
+    "rebornos"
+    "mabox"
+    "blendos"
+    "parch"
+    "parchlinux"
+    "biglinux"
+    "archlabs"
+    "archman"
+    "alci"
+    "bluestar"
+    "archbang"
+    "archex"
+    "archstrike"
+    "athena"
+    "athenaos"
+    "chimeraos"
+    "ctlos"
+    "crystal"
+    "hefftorlinux"
+    "instantos"
+    "nyarch"
+    "obarun"
+    "hyperbola"
+    "parabola"
+    "salientos"
+    "snal"
+    "steamos"
+    "holo"
+    "stormos"
+    "tearch"
+    "xerolinux"
+    "axyl"
+    "omarchy"
+)
+
 REQUIRED_PKGS=(
     "kitty" "cava" "zbar" "pavucontrol" "alsa-utils"
     "wl-clipboard" "fd" "qt6-multimedia" "qt6-5compat" "ripgrep"
@@ -28,15 +73,15 @@ check_supported_os() {
     if [ -f /etc/os-release ]; then
         local DETECTED_OS
         DETECTED_OS=$(awk -F= '/^ID=/{gsub(/"/, "", $2); print $2}' /etc/os-release)
-        case "$DETECTED_OS" in
-            arch|endeavouros|manjaro|cachyos|parch|garuda)
+
+        for os in "${SUPPORTED_DISTROS[@]}"; do
+            if [ "$DETECTED_OS" = "$os" ]; then
                 return 0
-                ;;
-            *)
-                echo "$(t "installer.os.error_unsupported" "os=$DETECTED_OS")"
-                exit 1
-                ;;
-        esac
+            fi
+        done
+
+        echo "$(t "installer.os.error_unsupported" "os=$DETECTED_OS")"
+        exit 1
     else
         echo "$(t "installer.os.error_not_found")"
         exit 1
