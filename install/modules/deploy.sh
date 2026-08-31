@@ -63,7 +63,8 @@ install_wallpapers() {
             git -C "$clone_dir" reset --hard origin/HEAD 2>/dev/null || git -C "$clone_dir" reset --hard origin/main 2>/dev/null || git -C "$clone_dir" reset --hard origin/master 2>/dev/null || true
         else
             rm -rf "$clone_dir"
-            git clone --depth 1 "$wallpaper_repo" "$clone_dir" 2>/dev/null || true
+            echo -e "\n\e[36m[ INFO ]\e[0m Cloning wallpapers repository..."
+            git clone --depth 1 "$wallpaper_repo" "$clone_dir" || true
         fi
 
         local src_dir="$clone_dir"
