@@ -6,6 +6,31 @@ EXTRA_CONFIGS=(
     "fastfetch"
 )
 
+render_wallpaper_progress() {
+    local current="$1"
+    local total="$2"
+    local label="${3:-Installing wallpapers}"
+    local bar_width=30
+    local percent=0
+    if [ "$total" -gt 0 ]; then
+        percent=$(( current * 100 / total ))
+    fi
+    local filled=0
+    if [ "$total" -gt 0 ]; then
+        filled=$(( current * bar_width / total ))
+    fi
+    local empty=$(( bar_width - filled ))
+    local bar_fill=""
+    local bar_empty=""
+    if [ "$filled" -gt 0 ]; then
+        bar_fill=$(printf "%*s" "$filled" "" | tr ' ' '=')
+    fi
+    if [ "$empty" -gt 0 ]; then
+        bar_empty=$(printf "%*s" "$empty" "" | tr ' ' ' ')
+    fi
+    printf "\r\e[36m[ INFO ]\e[0m %s \e[32m[%s%s]\e[0m %3d%% (%d/%d)" "$label" "$bar_fill" "$bar_empty" "$percent" "$current" "$total"
+}
+
 get_wallpaper_dir() {
     local user_pics=""
     if [ -f "$HOME/.config/user-dirs.dirs" ]; then
@@ -40,12 +65,33 @@ install_wallpapers() {
             rm -rf "$clone_dir"
             git clone --depth 1 "$wallpaper_repo" "$clone_dir" 2>/dev/null || true
         fi
+
+        local src_dir="$clone_dir"
         if [ -d "$clone_dir/images" ]; then
-            cp -r "$clone_dir/images/"* "$wallpaper_dir/" 2>/dev/null || true
-        elif [ -d "$clone_dir" ]; then
-            cp -r "$clone_dir/"* "$wallpaper_dir/" 2>/dev/null || true
-            rm -f "$wallpaper_dir/README.md" "$wallpaper_dir/LICENSE" 2>/dev/null || true
-            rm -rf "$wallpaper_dir/.git" 2>/dev/null || true
+            src_dir="$clone_dir/images"
+        fi
+
+        local files=()
+        while IFS= read -r f; do
+            [[ -n "$f" ]] && files+=("$f")
+        done < <(find "$src_dir" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.webp" \) 2>/dev/null)
+
+        local total=${#files[@]}
+        local count=0
+
+        if [ "$total" -gt 0 ]; then
+            for file in "${files[@]}"; do
+                cp "$file" "$wallpaper_dir/" 2>/dev/null || true
+                count=$((count + 1))
+                render_wallpaper_progress "$count" "$total" "Installing wallpapers"
+            done
+            echo ""
+        else
+            if [ -d "$src_dir" ]; then
+                cp -r "$src_dir/." "$wallpaper_dir/" 2>/dev/null || true
+                rm -f "$wallpaper_dir/README.md" "$wallpaper_dir/LICENSE" 2>/dev/null || true
+                rm -rf "$wallpaper_dir/.git" 2>/dev/null || true
+            fi
         fi
     else
         if [ -z "$(ls -A "$wallpaper_dir" 2>/dev/null | grep -iE '\.(jpg|jpeg|png|gif|webp)$')" ]; then
@@ -64,17 +110,29 @@ install_wallpapers() {
             fi
             (
                 cd "$clone_dir" || exit 0
-                local random_pics
-                random_pics=$(git ls-tree -r HEAD --name-only 2>/dev/null | grep -iE '\.(jpg|jpeg|png|gif|webp)$' | shuf -n 3)
-                if [ -z "$random_pics" ]; then
-                    random_pics=$(git ls-tree -r FETCH_HEAD --name-only 2>/dev/null | grep -iE '\.(jpg|jpeg|png|gif|webp)$' | shuf -n 3)
+                local random_pics=()
+                while IFS= read -r pic; do
+                    [[ -n "$pic" ]] && random_pics+=("$pic")
+                done < <(git ls-tree -r HEAD --name-only 2>/dev/null | grep -iE '\.(jpg|jpeg|png|gif|webp)$' | shuf -n 3)
+
+                if [ ${#random_pics[@]} -eq 0 ]; then
+                    while IFS= read -r pic; do
+                        [[ -n "$pic" ]] && random_pics+=("$pic")
+                    done < <(git ls-tree -r FETCH_HEAD --name-only 2>/dev/null | grep -iE '\.(jpg|jpeg|png|gif|webp)$' | shuf -n 3)
                 fi
-                if [ -n "$random_pics" ]; then
-                    for pic in $random_pics; do
+
+                local total=${#random_pics[@]}
+                local count=0
+
+                if [ "$total" -gt 0 ]; then
+                    for pic in "${random_pics[@]}"; do
                         local filename
                         filename=$(basename "$pic")
                         git show HEAD:"$pic" > "$wallpaper_dir/$filename" 2>/dev/null || git show FETCH_HEAD:"$pic" > "$wallpaper_dir/$filename" 2>/dev/null || true
+                        count=$((count + 1))
+                        render_wallpaper_progress "$count" "$total" "Installing wallpapers"
                     done
+                    echo ""
                 fi
             )
         fi
@@ -154,7 +212,7 @@ EOF
     else
         case "$init_sys" in
             systemd)
-                sudo systemctl enable --now sddm.service 2>/dev/null || sudo systemctl enable sddm.service -f 2>/dev/null || sudo systemctl enable sddm 2>/dev/null || true
+                sudo systemctl enable --now sddm.service 2>/dev/null || sudo systemctl enable -f sddm.service 2>/dev/null || sudo systemctl enable sddm 2>/dev/null || true
                 ;;
             openrc)
                 sudo rc-update add sddm default 2>/dev/null || true
