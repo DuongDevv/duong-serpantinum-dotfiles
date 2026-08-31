@@ -2,8 +2,6 @@
 
 set -e
 
-export GIT_TERMINAL_PROMPT=0
-
 setterm -blank 0 -powerdown 0 2>/dev/null || true
 printf '\033[9;0]' 2>/dev/null || true
 
