@@ -4,7 +4,7 @@
       "title": "Serpantinum",
       "loading": "Caricamento...",
       "unknown": "Sconosciuto",
-      "version_by": "v{version} • creato da {author}",
+      "version_by": "vcreato da {author}",
       "hardware": {
         "device_name": "Nome del dispositivo",
         "processor": "Processore",
