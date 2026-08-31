@@ -2,10 +2,13 @@
 
 set -e
 
+export GIT_TERMINAL_PROMPT=0
+
 setterm -blank 0 -powerdown 0 2>/dev/null || true
 printf '\033[9;0]' 2>/dev/null || true
 
-REPO_SLUG="${REPO_SLUG:-ilyamiro/serpantinum}"
+RAW_SLUG="${REPO_SLUG:-ilyamiro/serpantinum}"
+REPO_SLUG="$(printf '%s' "$RAW_SLUG" | tr -d '\r\n\t ' | sed 's/[^a-zA-Z0-9_\/-]//g')"
 CACHE_BASE="${XDG_CACHE_HOME:-$HOME/.cache}/serpantinum-installer"
 export REPO_SLUG
 
