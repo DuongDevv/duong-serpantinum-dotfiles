@@ -71,13 +71,13 @@ get_target_version() {
         target_ver=$(cat "$repo_root/version.txt" 2>/dev/null | xargs)
     fi
 
-    if [[ -z "$target_ver" \vert{}\vert{} "$target_ver" == "null" ]]; then
+    if [[ -z "$target_ver" || "$target_ver" == "null" ]]; then
         if command -v curl &>/dev/null; then
             target_ver=$(curl -s "https://raw.githubusercontent.com/${repo_slug}/HEAD/version.txt" 2>/dev/null | xargs)
         fi
     fi
 
-    if [[ -z "$target_ver" \vert{}\vert{} "$target_ver" == "null" ]]; then
+    if [[ -z "$target_ver" || "$target_ver" == "null" ]]; then
         target_ver="$DEFAULT_FALLBACK_VERSION"
     fi
 
@@ -93,13 +93,13 @@ get_target_commit() {
         target_commit=$(git -C "$repo_root" rev-parse --short HEAD 2>/dev/null || true)
     fi
 
-    if [[ -z "$target_commit" \vert{}\vert{} "$target_commit" == "null" ]]; then
+    if [[ -z "$target_commit" || "$target_commit" == "null" ]]; then
         if command -v curl &>/dev/null && command -v jq &>/dev/null; then
             target_commit=$(curl -s "https://api.github.com/repos/${repo_slug}/commits/HEAD" 2>/dev/null | jq -r '.sha[:7] // empty')
         fi
     fi
 
-    if [[ -z "$target_commit" \vert{}\vert{} "$target_commit" == "null" ]]; then
+    if [[ -z "$target_commit" || "$target_commit" == "null" ]]; then
         target_commit="unknown"
     fi
 
@@ -113,7 +113,7 @@ write_version_state() {
     local tel_enabled="${4:-true}"
     local compositors="$5"
 
-    if [[ -z "$commit" \vert{}\vert{} "$commit" == "null" ]]; then
+    if [[ -z "$commit" || "$commit" == "null" ]]; then
         commit="unknown"
     fi
 
