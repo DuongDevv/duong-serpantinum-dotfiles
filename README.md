@@ -1,4 +1,9 @@
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/ilyamiro)
+
+<div align="center">
+  <a href="https://ko-fi.com/ilyamiro">
+    <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" />
+  </a>
+</div>
 
 <div align="center">
   <img src="docs/assets/banner.png" alt="Serpantinum" width="550" />
@@ -142,6 +147,10 @@ Ensure your compositor config launches the daemon or shell binary on startup:
 serpantinumd start
 
 ```
+
+## Credits
+
+- Special thanks to Darkall44/Qylock for providing a gorgeous material SDDM theme!
 
 ---
 
