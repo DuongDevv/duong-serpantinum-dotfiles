@@ -7,6 +7,7 @@ import Quickshell.Io
 import QtQuick.Window
 import "../"
 import "../reusables"
+import "../singletons"
 
 Item {
     id: window
@@ -120,8 +121,7 @@ Item {
             focusTimer.restart();
             window.currentTime = new Date();
             updateCalendarGrid();
-            weatherPoller.running = false;
-            weatherPoller.running = true;
+            Weather.refresh(false);
             resetAndPlayIntro();
         } else {
             introAnim.stop();
@@ -208,7 +208,7 @@ Item {
         }
     }
 
-    property var weatherData: null
+    property var weatherData: Weather.data
     property int weatherView: 0
     property color activeWeatherHex: {
         if (!window.weatherData) return window.mauve;
@@ -311,29 +311,6 @@ Item {
         return bestIdx !== -1 ? bestIdx : 0;
     }
 
-    Process {
-        id: weatherPoller
-        command: ["bash", Caching.serpantinumDir + "/scripts/weather.sh", "--json"]
-        running: false
-        stdout: StdioCollector {
-            onStreamFinished: {
-                let txt = this.text.trim();
-                if (txt !== "") {
-                    try { window.weatherData = JSON.parse(txt); } catch(e) {}
-                }
-            }
-        }
-    }
-
-    Timer {
-        interval: 150000
-        running: window.visible; repeat: true
-        onTriggered: {
-            weatherPoller.running = false;
-            weatherPoller.running = true;
-        }
-    }
-
     property real centerOffset: 0
     property int monthOffset: 0
     property int targetMonthOffset: 0
@@ -416,7 +393,7 @@ Item {
         if (visible) {
             forceActiveFocus();
             focusTimer.restart();
-            weatherPoller.running = true;
+            Weather.refresh(false);
             resetAndPlayIntro();
         }
     }
@@ -951,7 +928,7 @@ Item {
 
                         Text {
                             Layout.alignment: Qt.AlignRight
-                            text: Math.round(window.displayedTemp) + "°C"
+                            text: Math.round(window.displayedTemp) + (Weather.unitSym || "°")
                             font.family: ThemeBackend.fontFamily
                             font.weight: Font.Black
                             font.pixelSize: window.s(72)
@@ -1015,7 +992,7 @@ Item {
 
                                 buttonIcon: index === 0 ? "" : index === 1 ? "" : index === 2 ? "" : ""
                                 buttonText: forecast ? (
-                                    index === 0 ? forecast.wind + "m/s" :
+                                    index === 0 ? forecast.wind + (Weather.unit === "imperial" ? "mph" : "m/s") :
                                     index === 1 ? forecast.humidity + "%" :
                                     index === 2 ? forecast.pop + "%" :
                                     forecast.feels_like + "°"
