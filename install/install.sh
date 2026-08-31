@@ -17,7 +17,7 @@ else
     PROJECT_ROOT=""
 fi
 
-if [[ -z "$PROJECT_ROOT" || ! -f "$PROJECT_ROOT/install/modules/deps.sh" \vert{}\vert{} ! -d "$PROJECT_ROOT/src" ]]; then
+if [[ -z "$PROJECT_ROOT" || ! -f "$PROJECT_ROOT/install/modules/deps.sh" || ! -d "$PROJECT_ROOT/src" ]]; then
     command -v git &>/dev/null || sudo pacman -Sy --noconfirm --needed git
     if [ ! -d "$CACHE_BASE/.git" ]; then
         rm -rf "$CACHE_BASE"
@@ -47,11 +47,12 @@ sync_repository() {
     if [ -d "$CACHE_BASE/.git" ]; then
         git -C "$CACHE_BASE" remote set-url origin "https://github.com/${REPO_SLUG}.git" 2>/dev/null || true
         git -C "$CACHE_BASE" fetch origin 2>/dev/null || true
-        git -C "$CACHE_BASE" reset --hard origin/HEAD 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/main 2>/dev/null \vert{}\vert{} git -C "$CACHE_BASE" reset --hard origin/master 2>/dev/null || true
+        git -C "$CACHE_BASE" reset --hard origin/HEAD 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/main 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/master 2>/dev/null || true
     fi
 }
 
 TELEMETRY_ID=$(get_telemetry_id)
+ENABLE_TELEMETRY=$(get_telemetry_enabled)
 
 check_supported_os
 bootstrap_installer_deps
@@ -71,12 +72,12 @@ TARGET_VERSION=$(get_target_version "$PROJECT_ROOT" "$REPO_SLUG")
 TARGET_COMMIT=$(get_target_commit "$PROJECT_ROOT" "$REPO_SLUG")
 
 if [ "$ENABLE_TELEMETRY" = true ] && [ -f "$MODULES_DIR/telemetry.sh" ]; then
-    bash "$MODULES_DIR/telemetry.sh" --mode init --version "$TARGET_VERSION" --id "$TELEMETRY_ID" --enabled true
+    bash "$MODULES_DIR/telemetry.sh" --mode init --version "$TARGET_VERSION" --id "$TELEMETRY_ID" --enabled "$ENABLE_TELEMETRY"
 fi
 
 if [[ "$INSTALL_STATE" == "legacy" ]]; then
     migrate_legacy "${SELECTED_COMPOSITORS[@]}"
-elif [[ "$INSTALL_STATE" == "fresh" \vert{}\vert{} "$IS_REINSTALL" == true ]]; then
+elif [[ "$INSTALL_STATE" == "fresh" || "$IS_REINSTALL" == true ]]; then
     backup_compositors "${SELECTED_COMPOSITORS[@]}"
 fi
 
@@ -92,7 +93,7 @@ init_serpantinum_config "$PROJECT_ROOT" "$WALLPAPER_DIR"
 setup_services
 write_version_state "$TARGET_VERSION" "$TARGET_COMMIT" "$TELEMETRY_ID" "$ENABLE_TELEMETRY" "${SELECTED_COMPOSITORS[*]}"
 
-if [[ "$INSTALL_STATE" == "legacy" || "$INSTALL_STATE" == "fresh" \vert{}\vert{} "$IS_REINSTALL" == true ]]; then
+if [[ "$INSTALL_STATE" == "legacy" || "$INSTALL_STATE" == "fresh" || "$IS_REINSTALL" == true ]]; then
     rm -f "$HOME/.local/state/serpantinum/first_launch.done" "$HOME/.local/state/quickshell/first_launch.done"
 fi
 
