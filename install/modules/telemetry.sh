@@ -17,6 +17,16 @@ KERNEL_INFO=""
 RAM_INFO=""
 DE_INFO=""
 
+format_uuid() {
+    local raw
+    raw=$(echo "$1" | tr -d '-' | tr '[:upper:]' '[:lower:]' | tr -cd '0-9a-f')
+    if [[ ${#raw} -eq 32 ]]; then
+        echo "$raw" | sed -E 's/(.{8})(.{4})(.{4})(.{4})(.{12})/\1-\2-\3-\4-\5/'
+    else
+        echo "$1"
+    fi
+}
+
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
         --mode|-m) MODE="$2"; shift 2 ;;
@@ -40,6 +50,8 @@ done
 if [[ -z "$MODE" ]]; then
     exit 1
 fi
+
+TELEMETRY_ID=$(format_uuid "$TELEMETRY_ID")
 
 if [[ -z "$OS_NAME" && -f /etc/os-release ]]; then
     OS_NAME=$(grep '^PRETTY_NAME=' /etc/os-release | cut -d= -f2 | tr -d '"')

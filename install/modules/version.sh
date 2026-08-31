@@ -5,12 +5,12 @@ VERSION_FILE="$STATE_DIR/version"
 DEFAULT_FALLBACK_VERSION="2.0.0"
 
 format_uuid() {
-    local raw="$1"
-    raw=$(echo "$raw" | tr -d '-' | tr '[:upper:]' '[:lower:]')
+    local raw
+    raw=$(echo "$1" | tr -d '-' | tr '[:upper:]' '[:lower:]' | tr -cd '0-9a-f')
     if [[ ${#raw} -eq 32 ]]; then
         echo "$raw" | sed -E 's/(.{8})(.{4})(.{4})(.{4})(.{12})/\1-\2-\3-\4-\5/'
     else
-        echo "$raw"
+        echo "$1"
     fi
 }
 
@@ -29,6 +29,8 @@ get_telemetry_id() {
         raw_id=$(uuidgen)
     elif [ -f /proc/sys/kernel/random/uuid ]; then
         raw_id=$(cat /proc/sys/kernel/random/uuid 2>/dev/null)
+    elif [ -f /etc/machine-id ]; then
+        raw_id=$(cat /etc/machine-id 2>/dev/null)
     else
         raw_id=$(head -c 16 /dev/urandom | od -An -t x1 | tr -d ' \n')
     fi

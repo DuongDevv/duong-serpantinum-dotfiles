@@ -51,12 +51,7 @@ get_user_uuid() {
         local id
         id=$(awk -F= '/^TELEMETRY_ID=/{gsub(/"/, "", $2); print $2}' "$version_file")
         if [ -n "$id" ]; then
-            id=$(echo "$id" | tr -d '-' | tr '[:upper:]' '[:lower:]')
-            if [[ ${#id} -eq 32 ]]; then
-                echo "$id" | sed -E 's/(.{8})(.{4})(.{4})(.{4})(.{12})/\1-\2-\3-\4-\5/'
-            else
-                echo "$id"
-            fi
+            format_uuid "$id"
             return
         fi
     fi
@@ -65,12 +60,7 @@ get_user_uuid() {
         local id
         id=$(cat "$state_file" 2>/dev/null | xargs)
         if [ -n "$id" ]; then
-            id=$(echo "$id" | tr -d '-' | tr '[:upper:]' '[:lower:]')
-            if [[ ${#id} -eq 32 ]]; then
-                echo "$id" | sed -E 's/(.{8})(.{4})(.{4})(.{4})(.{12})/\1-\2-\3-\4-\5/'
-            else
-                echo "$id"
-            fi
+            format_uuid "$id"
             return
         fi
     fi
@@ -81,19 +71,17 @@ get_user_uuid() {
     elif [ -f /proc/sys/kernel/random/uuid ]; then
         raw_id=$(cat /proc/sys/kernel/random/uuid 2>/dev/null)
     elif [ -f /etc/machine-id ]; then
-        raw_id=$(cat /etc/machine-id 2>/dev/null | tr -d ' \n')
+        raw_id=$(cat /etc/machine-id 2>/dev/null)
     else
         raw_id=$(head -c 16 /dev/urandom | od -An -t x1 | tr -d ' \n')
     fi
 
-    raw_id=$(echo "$raw_id" | tr -d '-' | tr '[:upper:]' '[:lower:]')
-    if [[ ${#raw_id} -eq 32 ]]; then
-        raw_id=$(echo "$raw_id" | sed -E 's/(.{8})(.{4})(.{4})(.{4})(.{12})/\1-\2-\3-\4-\5/'
-    fi
+    local formatted_id
+    formatted_id=$(format_uuid "$raw_id")
 
     mkdir -p "$(dirname "$state_file")"
-    echo "$raw_id" > "$state_file" 2>/dev/null || true
-    echo "$raw_id"
+    echo "$formatted_id" > "$state_file" 2>/dev/null || true
+    echo "$formatted_id"
 }
 
 sync_repository() {
