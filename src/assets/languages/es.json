@@ -59,9 +59,9 @@
         "desc": "Prefijo de comando usado para ejecuciones con > (ej. kitty -e, alacritty -e, foot -e)"
       },
       "smart_ranking": {
-	"title": "Ordenación inteligente de elementos en el lanzador",
-	"desc": "Ordenar aplicaciones según su uso y el tiempo que se pasa en ellas"
-      },			
+        "title": "Ordenación inteligente de elementos en el lanzador",
+        "desc": "Ordenar aplicaciones según su uso y el tiempo que se pasa en ellas"
+      },
       "test": "Abrir lanzador"
     },
     "notifications": {
@@ -86,6 +86,10 @@
       "sound_file": {
         "title": "Efecto de sonido",
         "desc": "Selecciona el sonido para alertas entrantes"
+      },
+      "empty_graphic": {
+        "title": "Animación de centro vacío",
+        "desc": "Mostrar el gráfico del gato durmiendo en el centro de notificaciones cuando esté vacío"
       }
     },
     "idle": {
@@ -833,7 +837,7 @@
       "round": "Redondo",
       "compact": "Compacto",
       "rect": "Rectangular",
-      "minimal": "Minimalista",			
+      "minimal": "Minimalista",
       "rounded": "Redondeado"
     }
   },

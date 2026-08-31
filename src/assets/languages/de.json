@@ -59,9 +59,9 @@
         "desc": "Befehlspräfix für > Ausführungen (z. B. kitty -e, alacritty -e, foot -e)"
       },
       "smart_ranking": {
-	"title": "Intelligente Sortierung von Elementen im Launcher",
-	"desc": "Apps basierend auf ihrer Nutzungshäufigkeit und der darin verbrachten Zeit sortieren"
-      },			
+        "title": "Intelligente Sortierung von Elementen im Launcher",
+        "desc": "Apps basierend auf ihrer Nutzungshäufigkeit und der darin verbrachten Zeit sortieren"
+      },
       "test": "Starter öffnen"
     },
     "notifications": {
@@ -86,6 +86,10 @@
       "sound_file": {
         "title": "Soundeffekt",
         "desc": "Ton für eingehende Benachrichtigungen auswählen"
+      },
+      "empty_graphic": {
+        "title": "Animation für leere Benachrichtigungen",
+        "desc": "Zeigt die schlafende Katze im Benachrichtigungszentrum an, wenn keine vorhanden sind"
       }
     },
     "idle": {
@@ -832,7 +836,7 @@
       "full": "Vollständig",
       "round": "Rund",
       "compact": "Kompakt",
-      "minimal": "Minimalistisch",	 		
+      "minimal": "Minimalistisch",
       "rect": "Rechteckig",
       "rounded": "Abgerundet"
     }

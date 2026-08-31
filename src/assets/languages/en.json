@@ -59,9 +59,9 @@
         "desc": "Command prefix used for > executions (e.g. kitty -e, alacritty -e, foot -e)"
       },
       "smart_ranking": {
-	"title": "Smart sorting of items in launcher",
-	"desc": "Sort apps based on usage and amount of time spent in them"			
-      },			
+        "title": "Smart sorting of items in launcher",
+        "desc": "Sort apps based on usage and amount of time spent in them"
+      },
       "test": "Open launcher"
     },
     "notifications": {
@@ -86,6 +86,10 @@
       "sound_file": {
         "title": "Sound effect",
         "desc": "Select the sound played for incoming alerts"
+      },
+      "empty_graphic": {
+        "title": "Empty center animation",
+        "desc": "Display the sleeping cat graphic in the notification center when empty"
       }
     },
     "idle": {
@@ -830,7 +834,7 @@
       "digital": "Digital",
       "analog": "Analog",
       "full": "Full",
-      "minimal": "Minimal",			
+      "minimal": "Minimal",
       "round": "Round",
       "compact": "Compact",
       "rect": "Rect",
