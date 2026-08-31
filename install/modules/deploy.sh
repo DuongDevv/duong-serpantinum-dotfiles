@@ -87,15 +87,24 @@ setup_sddm() {
         return 0
     fi
 
+    local init_sys="generic"
+    if declare -f detect_init_system >/dev/null; then
+        init_sys=$(detect_init_system)
+    fi
+
     echo -e "\n\e[36m[ INFO ]\e[0m $(t "installer.deploy.configuring_sddm")"
 
     if [ "$REPLACE_DM" = true ]; then
-        local dms=("gdm" "gdm3" "lightdm" "lxdm" "lxdm-gtk3" "ly")
+        local dms=("gdm" "gdm3" "lightdm" "lxdm" "lxdm-gtk3" "ly" "greetd" "emptty")
         for dm in "${dms[@]}"; do
-            if systemctl is-enabled "$dm.service" &>/dev/null || systemctl is-active "$dm.service" &>/dev/null; then
-                echo "  $(t "installer.deploy.disabling_dm" "dm=$dm")"
-                sudo systemctl disable "$dm.service" 2>/dev/null || true
-                sudo pacman -Rns --noconfirm "$dm" >/dev/null 2>&1 || true
+            if declare -f disable_system_service >/dev/null; then
+                disable_system_service "$dm" "$init_sys"
+            fi
+            if command -v pacman &>/dev/null; then
+                if pacman -Qq "$dm" &>/dev/null; then
+                    echo "  $(t "installer.deploy.disabling_dm" "dm=$dm")"
+                    sudo pacman -Rns --noconfirm "$dm" >/dev/null 2>&1 || true
+                fi
             fi
         done
     fi
@@ -140,7 +149,34 @@ ThemeDir=/usr/share/sddm/themes
 EOF
     fi
 
-    sudo systemctl enable sddm.service -f 2>/dev/null || true
+    if declare -f enable_system_service >/dev/null; then
+        enable_system_service "sddm" "$init_sys"
+    else
+        case "$init_sys" in
+            systemd)
+                sudo systemctl enable --now sddm.service 2>/dev/null || sudo systemctl enable sddm.service -f 2>/dev/null || sudo systemctl enable sddm 2>/dev/null || true
+                ;;
+            openrc)
+                sudo rc-update add sddm default 2>/dev/null || true
+                sudo rc-service sddm start 2>/dev/null || true
+                ;;
+            dinit)
+                sudo dinitctl enable sddm 2>/dev/null || sudo dinitctl start sddm 2>/dev/null || true
+                ;;
+            runit)
+                if [ -d "/etc/sv/sddm" ]; then
+                    sudo ln -sf "/etc/sv/sddm" /var/service/ 2>/dev/null || true
+                fi
+                ;;
+            s6)
+                sudo s6-rc-bundle-update -b add default sddm 2>/dev/null || true
+                ;;
+            *)
+                sudo systemctl enable sddm.service -f 2>/dev/null || true
+                ;;
+        esac
+    fi
+
     echo -e "  \e[32m$(t "installer.deploy.sddm_success")\e[0m"
 }
 
