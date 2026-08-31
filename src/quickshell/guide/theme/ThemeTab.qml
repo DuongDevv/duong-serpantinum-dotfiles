@@ -1024,6 +1024,25 @@ Item {
                         }
                     }
 
+                    ClickButton {
+                        id: sddmWpBtn
+                        Layout.preferredHeight: rootObj.s(32)
+                        cornerRadius: ThemeBackend.borderRadius
+                        horizontalPadding: rootObj.s(14)
+                        buttonIcon: "󰄛"
+                        iconFontSize: rootObj.s(15)
+                        buttonText: "Set SDDM Wallpaper"
+                        textFontSize: rootObj.s(11)
+                        accentColor: ThemeBackend.blue
+                        textColor: ThemeBackend.base
+                        contentAlignment: Qt.AlignHCenter
+                        onClicked: {
+                            if (themeTabRoot.currentWallpaperPath && themeTabRoot.currentWallpaperPath !== "") {
+                                Quickshell.execDetached(["bash", Caching.serpantinumDir + "/scripts/set_sddm_wp.sh", themeTabRoot.currentWallpaperPath]);
+                            }
+                        }
+                    }
+
                     Item { Layout.fillWidth: true }
 
                     MouseArea {
