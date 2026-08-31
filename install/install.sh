@@ -24,6 +24,10 @@ if [[ -z "$PROJECT_ROOT" || ! -f "$PROJECT_ROOT/install/modules/deps.sh" || ! -d
         rm -rf "$CACHE_BASE"
         mkdir -p "$CACHE_BASE"
         git clone "https://github.com/${REPO_SLUG}.git" "$CACHE_BASE"
+    else
+        git -C "$CACHE_BASE" remote set-url origin "https://github.com/${REPO_SLUG}.git" 2>/dev/null || true
+        git -C "$CACHE_BASE" fetch origin 2>/dev/null || true
+        git -C "$CACHE_BASE" reset --hard origin/HEAD 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/main 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/master 2>/dev/null || true
     fi
     INSTALL_DIR="$CACHE_BASE/install"
     PROJECT_ROOT="$CACHE_BASE"
@@ -44,14 +48,6 @@ source "$MODULES_DIR/config.sh"
 source "$MODULES_DIR/service.sh"
 source "$MODULES_DIR/ui.sh"
 
-sync_repository() {
-    if [ -d "$CACHE_BASE/.git" ]; then
-        git -C "$CACHE_BASE" remote set-url origin "https://github.com/${REPO_SLUG}.git" 2>/dev/null || true
-        git -C "$CACHE_BASE" fetch origin 2>/dev/null || true
-        git -C "$CACHE_BASE" reset --hard origin/HEAD 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/main 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/master 2>/dev/null || true
-    fi
-}
-
 TELEMETRY_ID=$(get_telemetry_id)
 ENABLE_TELEMETRY=$(get_telemetry_enabled)
 
@@ -66,8 +62,6 @@ OLD_COMMIT=$(get_installed_commit)
 
 init_compositor_detection
 run_installer_ui
-
-sync_repository
 
 TARGET_VERSION=$(get_target_version "$PROJECT_ROOT" "$REPO_SLUG")
 TARGET_COMMIT=$(get_target_commit "$PROJECT_ROOT" "$REPO_SLUG")
