@@ -1,161 +1,60 @@
+# 🐉 Duong's Custom Serpantinum & Hyprland Desktop
 
-<div align="center">
-  <a href="https://ko-fi.com/ilyamiro">
-    <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" />
-  </a>
-</div>
+[![Arch Linux](https://img.shields.io/badge/OS-Arch_Linux-blue?logo=archlinux)](https://archlinux.org/)
+[![Hyprland](https://img.shields.io/badge/Compositor-Hyprland_v0.56-blue?logo=wayland)](https://hyprland.org/)
+[![Quickshell](https://img.shields.io/badge/UI_Engine-Quickshell_Qt6-green)](https://github.com/outfoxxed/quickshell)
+[![NVIDIA](https://img.shields.io/badge/GPU-NVIDIA_RTX_5050-green?logo=nvidia)](https://www.nvidia.com/)
 
-<div align="center">
-  <img src="docs/assets/banner.png" alt="Serpantinum" width="850" />
-</div>
+An ultra-sleek, high-performance, and reactive Wayland Desktop Environment for Arch Linux. Built on **Quickshell (Qt6/QML)** and **Hyprland**, pre-configured with a Black Myth: Wukong AMOLED theme, 12px golden-ratio rounding, and dynamic Matugen color extraction.
 
-## Previews
-
-| | |
-|---|---|
-| ![Preview 1](docs/assets/previews/preview_1.png) | ![Preview 2](docs/assets/previews/preview_2.png) |
-| ![Preview 3](docs/assets/previews/preview_3.png) | ![Preview 4](docs/assets/previews/preview_4.png) |
+> 🛠️ **Hardware Target:** Optimized for **Lenovo LOQ 13th Gen (Intel Core i7-13650HX + NVIDIA GeForce RTX 5050 Mobile)**.
 
 ---
 
-## Installation
+## ✨ Highlights & Key Features
 
-> [!IMPORTANT]
-> **Migrating from v1:** All previous configuration will be backed up and unused. Configuration of compositor settings such as monitors, keybinds, and autostart is now up to you, as the project migrated from being dotfiles to being a shell.
+* ⚡ **Unified Quickshell Engine (Qt6/QML):** Zero-lag, 60–140Hz physics-based animations for Top Bar, Launcher, Control Center, and Popups.
+* 🎨 **Matugen Dynamic Color Schemes:** Wallpapers automatically generate Material-You color palettes across UI widgets, borders, and Kitty terminal.
+* 🪟 **Hyprland Visual Polish:** 12px rounded corners, 45° gradient active borders (`Cyan Slate -> Indigo`), 3-pass backdrop blur, and 3D shadows.
+* 💻 **Tailored Kitty Terminal:** Pre-configured with 11.5pt JetBrains Mono, `10 14` window padding, `0.95` opacity, and auto-executing `fastfetch` badge.
+* 🔇 **Zero-Distraction Audio Profile:** Pre-configured with muted UI click SFX and silent notification chimes.
+* 🖼️ **AMOLED Wallpaper Pack:** Pre-loaded with Black Myth Wukong AMOLED, Berserk, Gojo Satoru, and high-contrast anime wallpapers.
 
-### Arch Linux and its derivatives
+---
 
-For Arch-based distributions (including systemd, OpenRC, and other init systems), run the automated installation script:
+## ⌨️ Hotkeys & Keybindings Cheatsheet
+
+| Keybinding | Action |
+| :--- | :--- |
+| `SUPER + RETURN` | Launch Kitty Terminal |
+| `SUPER + D` | Open App Launcher & Search Drawer |
+| `SUPER + W` | Open Live Wallpaper Picker |
+| `SUPER + C` | Open Clipboard Manager |
+| `SUPER + B` | Open System Control Center (Wi-Fi, Bluetooth, Audio, Night Light) |
+| `SUPER + Q` | Toggle Music Player |
+| `SUPER + S` | Toggle Calendar & Notification Panel |
+| `SUPER + N` | Toggle Network Wi-Fi Popup |
+| `SUPER + V` | Toggle Volume Slider |
+| `SUPER + L` | Lock Screen |
+| `SUPER + F` | Launch Web Browser (Firefox) |
+| `SUPER + E` | Launch File Manager |
+| `ALT + F4` | Close Active Window |
+| `SUPER + 1..9` | Switch Workspace 1..9 |
+
+---
+
+## 🚀 One-Liner Quick Installation
+
+To deploy this exact configuration on a fresh Arch Linux system:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/ilyamiro/serpantinum/master/install/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/DuongDevv/duong-serpantinum-dotfiles/main/install.sh)"
 ```
 
 ---
 
-### NixOS
+## 📜 Credits & Acknowledgements
 
-Serpantinum provides flake outputs, a NixOS module for system dependencies, and a Home Manager module for user configuration and service management.
+* Base Framework & Engine by [ilyamiro/serpantinum](https://github.com/ilyamiro/serpantinum).
+* Customized, patched, and maintained by [DuongDevv](https://github.com/DuongDevv).
 
-#### 1. Add Flake Input
-
-Add Serpantinum to your `flake.nix`:
-
-```nix
-{
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    serpantinum.url = "github:ilyamiro/serpantinum";
-  };
-
-  outputs = { self, nixpkgs, serpantinum, ... }: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit serpantinum; };
-      modules = [
-        ./configuration.nix
-        serpantinum.nixosModules.default
-      ];
-    };
-  };
-}
-
-```
-
-#### 2. configuration.nix
-
-Enable the NixOS module to configure system prerequisites:
-
-```nix
-{
-  programs.serpantinum.enable = true;
-}
-
-```
-
-If you prefer installing the package directly without the system module:
-
-```nix
-{ pkgs, serpantinum, ... }:
-
-{
-  environment.systemPackages = [
-    serpantinum.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ];
-}
-
-```
-
-#### 3. Home Manager Configuration
-
-```nix
-{ serpantinum, ... }:
-
-{
-  imports = [
-    serpantinum.homeManagerModules.default
-  ];
-
-  programs.serpantinum = {
-    enable = true;
-    systemd.enable = true;
-
-    settings = {
-      wallpaperDir = "/home/username/Pictures/Wallpapers";
-
-      general = {
-        language = "en";
-        weatherUnit = "metric";
-        weatherInterval = 30;
-      };
-
-      bar = {
-        position = "top";
-        style = "solid";
-        width = 40;
-        workspaceCount = 10;
-        modules = {
-          left = [ "workspaces" ];
-          center = [ "time" ];
-          right = [ "tray" [ "kb" "wifi" "bt" "vol" "bat" ] ];
-        };
-      };
-
-      theme = {
-        fontFamily = "Adwaita Mono";
-        borderRadius = 12;
-        matugen = true;
-      };
-
-      notifications = {
-        dnd = false;
-        position = "top right";
-        sound = true;
-      };
-    };
-  };
-}
-
-```
-
-> **Note:** The automatic installer handles compositor integration on standard distributions. On NixOS / Home Manager, you must manually integrate compositor configs.
-> Sample configs, autostart entries, and keybindings for supported window managers and compositors are available in the [compositors](https://github.com/ilyamiro/serpantinum/tree/master/compositors) directory.
-
-Ensure your compositor config launches the daemon or shell binary on startup:
-
-```bash
-serpantinumd start
-
-```
-
-## Credits
-
-- Special thanks to Darkall44/Qylock for providing a gorgeous material SDDM theme!
-
----
-
-## License
-
-Copyright (C) 2026 Illia Miroshnichenko
-
-This project is licensed under the GNU Affero General Public License version 3, or (at your option) any later version. See the [LICENSE.md](LICENSE.md) file for the full license text.
