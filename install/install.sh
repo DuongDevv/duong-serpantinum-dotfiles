@@ -5,8 +5,8 @@ set -e
 setterm -blank 0 -powerdown 0 2>/dev/null || true
 printf '\033[9;0]' 2>/dev/null || true
 
-REPO_SLUG="${REPO_SLUG:-"ilyamiro/serpantinum"}"
-CACHE_BASE="${XDG_CACHE_HOME:-"$HOME/.cache"}/serpantinum-installer"
+REPO_SLUG="${REPO_SLUG:-ilyamiro/serpantinum}"
+CACHE_BASE="${XDG_CACHE_HOME:-$HOME/.cache}/serpantinum-installer"
 export REPO_SLUG
 
 if [ -n "${BASH_SOURCE[0]}" ] && [ -f "${BASH_SOURCE[0]}" ]; then
