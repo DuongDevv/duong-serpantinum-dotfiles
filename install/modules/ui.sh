@@ -140,17 +140,17 @@ EOF
     printf "%s\n" "$RESET"
 
     local OSC8_GH=$'\e]8;;https://github.com/'"${REPO_SLUG}"$'\a'
-    local OSC8_TW=$'\e]8;;https://twitter.com/ilyamirox\a'
-    local OSC8_RD=$'\e]8;;https://reddit.com/u/ilyamiro1\a'
+    local OSC8_TW=$'\e]8;;https://twitter.com/DuongDevvx\a'
+    local OSC8_RD=$'\e]8;;https://reddit.com/u/DuongDevv1\a'
     local OSC8_TG=$'\e]8;;https://t.me/stewart_github\a'
-    local OSC8_KF=$'\e]8;;https://ko-fi.com/ilyamiro\a'
+    local OSC8_KF=$'\e]8;;https://ko-fi.com/DuongDevv\a'
     local OSC8_END=$'\e]8;;\a'
 
     printf "\033[K%s--------------------------------------------------------------------------------%s\n" "$C_BLUE" "$RESET"
     printf "\033[K%s%s $(t "installer.ui.github")%s   %shttps://github.com/%s%s\n" "$BOLD" "$C_GREEN" "$RESET" "$OSC8_GH" "$REPO_SLUG" "$OSC8_END"
-    printf "\033[K%s%s $(t "installer.ui.twitter")%s  %s@ilyamirox%s  |  %s%s$(t "installer.ui.reddit")%s %su/ilyamiro1%s\n" "$BOLD" "$C_CYAN" "$RESET" "$OSC8_TW" "$OSC8_END" "$BOLD" "$C_RED" "$RESET" "$OSC8_RD" "$OSC8_END"
+    printf "\033[K%s%s $(t "installer.ui.twitter")%s  %s@DuongDevvx%s  |  %s%s$(t "installer.ui.reddit")%s %su/DuongDevv1%s\n" "$BOLD" "$C_CYAN" "$RESET" "$OSC8_TW" "$OSC8_END" "$BOLD" "$C_RED" "$RESET" "$OSC8_RD" "$OSC8_END"
     printf "\033[K%s%s $(t "installer.ui.telegram")%s %shttps://t.me/stewart_github%s\n" "$BOLD" "$C_BLUE" "$RESET" "$OSC8_TG" "$OSC8_END"
-    printf "\033[K%s%s $(t "installer.ui.donate")%s   %shttps://ko-fi.com/ilyamiro $(t "installer.ui.donate_sub")%s\n" "$BOLD" "$C_MAGENTA" "$RESET" "$OSC8_KF" "$OSC8_END"
+    printf "\033[K%s%s $(t "installer.ui.donate")%s   %shttps://ko-fi.com/DuongDevv $(t "installer.ui.donate_sub")%s\n" "$BOLD" "$C_MAGENTA" "$RESET" "$OSC8_KF" "$OSC8_END"
     printf "\033[K%s--------------------------------------------------------------------------------%s\n" "$C_BLUE" "$RESET"
     printf "\033[K%s $(t "installer.ui.user")%s %-25s | %s$(t "installer.ui.os")%s %s\n" "$BOLD" "$RESET" "$USER_NAME" "$BOLD" "$RESET" "$OS_NAME"
     printf "\033[K%s $(t "installer.ui.cpu")%s  %-25s | %s$(t "installer.ui.gpu")%s %s\n" "$BOLD" "$RESET" "$CPU_INFO" "$BOLD" "$RESET" "$GPU_INFO"
@@ -655,7 +655,7 @@ EOF
     printf "%s%s================================================================================%s\n" "$BOLD" "$C_MAGENTA" "$RESET"
     printf "%s%s $(t "installer.ui.support_creator")%s\n" "$BOLD" "$C_YELLOW" "$RESET"
     printf " $(t "installer.ui.buy_coffee")\n"
-    printf " %s%sKo-fi:%s https://ko-fi.com/ilyamiro\n" "$BOLD" "$C_CYAN" "$RESET"
+    printf " %s%sKo-fi:%s https://ko-fi.com/DuongDevv\n" "$BOLD" "$C_CYAN" "$RESET"
     printf "%s%s================================================================================%s\n\n" "$BOLD" "$C_MAGENTA" "$RESET"
     printf "%s%s%s\n" "$C_GREEN" "$(t "installer.ui.installed_success" "ver=$target_ver" "commit=$target_commit")" "$RESET"
     if [ ${#FAILED_PKGS[@]} -gt 0 ]; then

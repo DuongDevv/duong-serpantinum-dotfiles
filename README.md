@@ -55,6 +55,6 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/DuongDevv/duong-serpanti
 
 ## 📜 Credits & Acknowledgements
 
-* Base Framework & Engine by [ilyamiro/serpantinum](https://github.com/ilyamiro/serpantinum).
+* Base Framework & Engine by [DuongDevv/duong-serpantinum-dotfiles](https://github.com/DuongDevv/duong-serpantinum-dotfiles).
 * Customized, patched, and maintained by [DuongDevv](https://github.com/DuongDevv).
 
