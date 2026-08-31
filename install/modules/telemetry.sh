@@ -4,6 +4,9 @@ WORKER_URL="https://dots-telemetry.ilyamiro-work.workers.dev"
 
 MODE=""
 VERSION=""
+OLD_VERSION=""
+INSTALL_STATE=""
+COMPOSITOR=""
 TELEMETRY_ID=""
 OS_NAME=""
 TELEMETRY_ENABLED="true"
@@ -18,6 +21,9 @@ while [[ "$#" -gt 0 ]]; do
     case "$1" in
         --mode|-m) MODE="$2"; shift 2 ;;
         --version|-v) VERSION="$2"; shift 2 ;;
+        --old-version) OLD_VERSION="$2"; shift 2 ;;
+        --install-state) INSTALL_STATE="$2"; shift 2 ;;
+        --compositor|-c) COMPOSITOR="$2"; shift 2 ;;
         --id) TELEMETRY_ID="$2"; shift 2 ;;
         --os) OS_NAME="$2"; shift 2 ;;
         --enabled) TELEMETRY_ENABLED="$2"; shift 2 ;;
@@ -75,6 +81,9 @@ elif [[ "$MODE" == "done" ]]; then
 {
   "type": "done",
   "version": "${VERSION}",
+  "old_version": "${OLD_VERSION//\"/\\\"}",
+  "install_state": "${INSTALL_STATE//\"/\\\"}",
+  "compositor": "${COMPOSITOR//\"/\\\"}",
   "id": "${TELEMETRY_ID}",
   "telemetry_enabled": true,
   "failed_packages": "${FAILED_PACKAGES//\"/\\\"}",
@@ -92,6 +101,9 @@ EOF
 {
   "type": "done",
   "version": "${VERSION}",
+  "old_version": "${OLD_VERSION//\"/\\\"}",
+  "install_state": "${INSTALL_STATE//\"/\\\"}",
+  "compositor": "${COMPOSITOR//\"/\\\"}",
   "id": "${TELEMETRY_ID}",
   "telemetry_enabled": false,
   "os": "${OS_NAME//\"/\\\"}"
