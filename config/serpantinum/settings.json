@@ -1,10 +1,31 @@
 {
   "general": {
     "language": "en",
-    "avatarPath": "",
-    "muteSfx": false,
+    "avatarPath": "/home/duong/Pictures/Wallpapers/saitama-ok-one-3840x2160-20909.jpg",
+    "muteSfx": true,
     "weatherInterval": 15,
-    "weatherUnit": "metric"
+    "weatherUnit": "metric",
+    "location": {
+      "ip": "42.119.231.196",
+      "latitude": 10.822,
+      "longitude": 106.6257,
+      "city": "Ho Chi Minh City",
+      "region": "Ho Chi Minh",
+      "region_code": "SG",
+      "country_name": "Vietnam",
+      "country_code": "VN",
+      "postal": "700000",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "utc_offset": null,
+      "currency": "VND",
+      "languages": null,
+      "asn": "AS18403 FPT Telecom Company",
+      "org": "Vietnam Internet Network Information Center",
+      "source": "ip-api.com",
+      "updated_at": 1788187479
+    },
+    "sfxVolume": 0,
+    "quickactions": true
   },
   "syspanel": {
     "clipExpandProgress": 0,
@@ -13,28 +34,26 @@
   },
   "bar": {
     "position": "top",
-    "width": 100,
+    "width": 99,
     "opacity": 100,
-    "style": "fill", 
+    "style": "modular",
     "time": {
       "format": "HH:mm:ss"
     },
     "autohide": false,
-    "autohideTimeout": 1000,
+    "autohideTimeout": 8200,
     "modules": {
       "left": [
         "left",
         "workspaces",
-        "media" 
+        "media"
       ],
-     "center": [
-        [
-          "timedate",
-          "info",
-          "weather"
-        ]
-      ],      
-     "right": [
+      "center": [
+        "timedate",
+        "info",
+        "weather"
+      ],
+      "right": [
         "tray",
         [
           "kb",
@@ -44,13 +63,39 @@
           "bat"
         ]
       ]
-    }
+    },
+    "workspaceCount": 8,
+    "groupColors": {}
   },
   "theme": {
     "fontFamily": "Adwaita Mono",
     "borderRadius": 10,
-    "activePreset": "Matugen",
-    "matugen": true
+    "activePreset": "Obsidian",
+    "matugen": false,
+    "colors": {
+      "base": "#000000",
+      "blue": "#ffffff",
+      "crust": "#000000",
+      "green": "#ffffff",
+      "mantle": "#050505",
+      "maroon": "#808080",
+      "mauve": "#d0d0d0",
+      "overlay0": "#5a5a5a",
+      "overlay1": "#7a7a7a",
+      "overlay2": "#9a9a9a",
+      "peach": "#cccccc",
+      "pink": "#e0e0e0",
+      "red": "#a0a0a0",
+      "sapphire": "#e0e0e0",
+      "subtext0": "#a0a0a0",
+      "subtext1": "#c0c0c0",
+      "surface0": "#1a1a1a",
+      "surface1": "#2a2a2a",
+      "surface2": "#3a3a3a",
+      "teal": "#c0c0c0",
+      "text": "#ffffff",
+      "yellow": "#ffffff"
+    }
   },
   "idle": {
     "enabled": true,
@@ -98,10 +143,10 @@
     }
   },
   "notifications": {
-    "dnd": true,
+    "dnd": false,
     "position": "top right",
-    "sound": true,
-    "soundFile": ""
+    "sound": false,
+    "soundFile": "/home/duong/.local/share/serpantinum/src/assets/sounds/notifications/Botanica.wav"
   },
   "display": {
     "monitors": {
@@ -110,5 +155,14 @@
         "scale": 1
       }
     }
-  }
+  },
+  "launcher": {
+    "position": "bottom",
+    "width": 630,
+    "itemCount": 6,
+    "terminalCommand": "kitty -e",
+    "smartRanking": true
+  },
+  "wallpaperDir": "/home/duong/Pictures/Wallpapers",
+  "wallpaper_dir": "/home/duong/Pictures/Wallpapers"
 }
