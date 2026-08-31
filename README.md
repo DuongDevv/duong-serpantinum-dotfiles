@@ -9,9 +9,6 @@
   <img src="docs/assets/banner.png" alt="Serpantinum" width="550" />
 </div>
 
-> [!IMPORTANT]
-> **Migrating from v1:** All previous configuration will be backed up and unused. Configuration of compositor settings such as monitors, keybinds, and autostart is now up to you, as the project migrated from being dotfiles to being a shell.
-
 ## Previews
 
 | | |
@@ -22,6 +19,9 @@
 ---
 
 ## Installation
+
+> [!IMPORTANT]
+> **Migrating from v1:** All previous configuration will be backed up and unused. Configuration of compositor settings such as monitors, keybinds, and autostart is now up to you, as the project migrated from being dotfiles to being a shell.
 
 ### Arch Linux and its derivatives
 
