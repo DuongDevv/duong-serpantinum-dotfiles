@@ -17,7 +17,7 @@ else
     PROJECT_ROOT=""
 fi
 
-if [[ -z "$PROJECT_ROOT" || ! -f "$PROJECT_ROOT/install/modules/deps.sh" || ! -d "$PROJECT_ROOT/src" ]]; then
+if [[ -z "$PROJECT_ROOT" || ! -f "$PROJECT_ROOT/install/modules/deps.sh" \vert{}\vert{} ! -d "$PROJECT_ROOT/src" ]]; then
     command -v git &>/dev/null || sudo pacman -Sy --noconfirm --needed git
     if [ ! -d "$CACHE_BASE/.git" ]; then
         rm -rf "$CACHE_BASE"
@@ -43,56 +43,15 @@ source "$MODULES_DIR/config.sh"
 source "$MODULES_DIR/service.sh"
 source "$MODULES_DIR/ui.sh"
 
-get_user_uuid() {
-    local state_file="$HOME/.local/state/serpantinum/telemetry_id"
-    local version_file="$HOME/.local/state/serpantinum/version"
-
-    if [ -f "$version_file" ]; then
-        local id
-        id=$(awk -F= '/^TELEMETRY_ID=/{gsub(/"/, "", $2); print $2}' "$version_file")
-        if [ -n "$id" ]; then
-            format_uuid "$id"
-            return
-        fi
-    fi
-
-    if [ -f "$state_file" ]; then
-        local id
-        id=$(cat "$state_file" 2>/dev/null | xargs)
-        if [ -n "$id" ]; then
-            format_uuid "$id"
-            return
-        fi
-    fi
-
-    local raw_id=""
-    if command -v uuidgen &>/dev/null; then
-        raw_id=$(uuidgen)
-    elif [ -f /proc/sys/kernel/random/uuid ]; then
-        raw_id=$(cat /proc/sys/kernel/random/uuid 2>/dev/null)
-    elif [ -f /etc/machine-id ]; then
-        raw_id=$(cat /etc/machine-id 2>/dev/null)
-    else
-        raw_id=$(head -c 16 /dev/urandom | od -An -t x1 | tr -d ' \n')
-    fi
-
-    local formatted_id
-    formatted_id=$(format_uuid "$raw_id")
-
-    mkdir -p "$(dirname "$state_file")"
-    echo "$formatted_id" > "$state_file" 2>/dev/null || true
-    echo "$formatted_id"
-}
-
 sync_repository() {
     if [ -d "$CACHE_BASE/.git" ]; then
         git -C "$CACHE_BASE" remote set-url origin "https://github.com/${REPO_SLUG}.git" 2>/dev/null || true
         git -C "$CACHE_BASE" fetch origin 2>/dev/null || true
-        git -C "$CACHE_BASE" reset --hard origin/HEAD 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/main 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/master 2>/dev/null || true
+        git -C "$CACHE_BASE" reset --hard origin/HEAD 2>/dev/null || git -C "$CACHE_BASE" reset --hard origin/main 2>/dev/null \vert{}\vert{} git -C "$CACHE_BASE" reset --hard origin/master 2>/dev/null || true
     fi
 }
 
-TELEMETRY_ID=$(get_user_uuid)
+TELEMETRY_ID=$(get_telemetry_id)
 
 check_supported_os
 bootstrap_installer_deps
@@ -117,7 +76,7 @@ fi
 
 if [[ "$INSTALL_STATE" == "legacy" ]]; then
     migrate_legacy "${SELECTED_COMPOSITORS[@]}"
-elif [[ "$INSTALL_STATE" == "fresh" || "$IS_REINSTALL" == true ]]; then
+elif [[ "$INSTALL_STATE" == "fresh" \vert{}\vert{} "$IS_REINSTALL" == true ]]; then
     backup_compositors "${SELECTED_COMPOSITORS[@]}"
 fi
 
@@ -133,7 +92,7 @@ init_serpantinum_config "$PROJECT_ROOT" "$WALLPAPER_DIR"
 setup_services
 write_version_state "$TARGET_VERSION" "$TARGET_COMMIT" "$TELEMETRY_ID" "$ENABLE_TELEMETRY" "${SELECTED_COMPOSITORS[*]}"
 
-if [[ "$INSTALL_STATE" == "legacy" || "$INSTALL_STATE" == "fresh" || "$IS_REINSTALL" == true ]]; then
+if [[ "$INSTALL_STATE" == "legacy" || "$INSTALL_STATE" == "fresh" \vert{}\vert{} "$IS_REINSTALL" == true ]]; then
     rm -f "$HOME/.local/state/serpantinum/first_launch.done" "$HOME/.local/state/quickshell/first_launch.done"
 fi
 
